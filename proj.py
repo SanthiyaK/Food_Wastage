@@ -3,27 +3,27 @@ import pandas as pd
 from sqlalchemy import create_engine, text
 
 # -------------------------
-# 1️⃣ Database Connection
+#  Database Connection
 # -------------------------
 engine = create_engine("mysql+mysqlconnector://root:root%40123@localhost/food_wastage_db")
 
 # -------------------------
-# 2️⃣ App Configuration
+#  App Configuration
 # -------------------------
 st.set_page_config(page_title="Food Wastage Portal", layout="wide")
-st.title("🍽 Food Wastage Management Portal")
+st.title(" Food Wastage Management Portal")
 
 # -------------------------
-# 3️⃣ Sidebar Navigation
+#  Sidebar Navigation
 # -------------------------
 menu = ["Dashboard", "CRUD Operations", "Filters", "Contact", "Analytics"]
 choice = st.sidebar.selectbox("Menu", menu)
 
 # -------------------------
-# 4️⃣ Dashboard: Quick View
+#  Dashboard: Quick View
 # -------------------------
 if choice == "Dashboard":
-    st.header("📋 Quick Dashboard Overview")
+    st.header(" Quick Dashboard Overview")
     
     with engine.connect() as conn:
         total_providers = pd.read_sql("SELECT COUNT(*) AS count FROM providers", conn).iloc[0,0]
@@ -38,7 +38,7 @@ if choice == "Dashboard":
     col4.metric("Total Claims", total_claims)
 
 # -------------------------
-# 5️⃣ CRUD Operations
+#  CRUD Operations
 # -------------------------
 elif choice == "CRUD Operations":
     st.header("🛠 CRUD Operations")
@@ -68,7 +68,7 @@ elif choice == "CRUD Operations":
                         INSERT INTO providers (Name, Type, Address, City, Contact)
                         VALUES (:name, :type, :address, :city, :contact)
                     """), {"name": name, "type": type_, "address": address, "city": city, "contact": contact})
-                    st.success("✅ Provider added successfully!")
+                    st.success(" Provider added successfully!")
                 
                 elif action == "Update":
                     conn.execute(text("""
@@ -76,19 +76,19 @@ elif choice == "CRUD Operations":
                         SET Name=:name, Type=:type, Address=:address, City=:city, Contact=:contact
                         WHERE Provider_ID=:id
                     """), {"name": name, "type": type_, "address": address, "city": city, "contact": contact, "id": record_id})
-                    st.success("✅ Provider updated successfully!")
+                    st.success(" Provider updated successfully!")
                 
                 elif action == "Delete":
                     conn.execute(text("DELETE FROM providers WHERE Provider_ID=:id"), {"id": record_id})
-                    st.success("✅ Provider deleted successfully!")
+                    st.success(" Provider deleted successfully!")
 
     # Similar CRUD blocks can be added for receivers, food_listings, and claims
 
 # -------------------------
-# 6️⃣ Filters
+#  Filters
 # -------------------------
 elif choice == "Filters":
-    st.header("🔍 Filter Food Donations")
+    st.header(" Filter Food Donations")
     location = st.text_input("Location")
     provider = st.text_input("Provider Name")
     food_type = st.text_input("Food Type")
@@ -118,10 +118,10 @@ elif choice == "Filters":
     st.dataframe(filtered_food)
 
 # -------------------------
-# 7️⃣ Contact
+#  Contact
 # -------------------------
 elif choice == "Contact":
-    st.header("📞 Contact Providers / Receivers")
+    st.header(" Contact Providers / Receivers")
     contact_type = st.radio("Contact", ["Providers", "Receivers"])
     
     with engine.connect() as conn:
@@ -133,10 +133,10 @@ elif choice == "Contact":
     st.dataframe(df)
 
 # -------------------------
-# 8️⃣ Analytics & Queries
+#  Analytics & Queries
 # -------------------------
 elif choice == "Analytics":
-    st.header("📊 Analytics & Insights")
+    st.header(" Analytics & Insights")
     
     queries = {
         "Providers per city": "SELECT City, COUNT(*) AS Provider_Count FROM providers GROUP BY City",
